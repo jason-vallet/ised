@@ -1,2 +1,1 @@
-# ised
-I-SED: Interactive Sound Event Detector
+# I-SED: Interactive Sound Event Detector
