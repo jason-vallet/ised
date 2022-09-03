@@ -1,10 +1,37 @@
 # I-SED: Interactive Sound Event Detector
 
-I-SED is a human-in-the-loop interface for sound event annotation that helps users label sound events of interest within a lenghty recording quickly. The system speeds up human’s searching for a set of sound events of interest in an audio recording
+*NOTE: I-SED was developed in 2017 as a proof-of-concept, just for a user study of a research paper. It is not ready to be used for other purposes and the code is very disorganized. However, you can still run the app and test the main concept of the interactive sound event annotation. I also believe some components of this app are quite useful to people who want to build a sound event annotator.*
 
-I-SED was developed as a part of [Bongjun Kim](https://www.bongjunkim.com/)'s PhD research in 2018. More details about the interface can be found in the following project pages: [https://www.bongjunkim.com/pages/projects/ised.html](https://www.bongjunkim.com/pages/projects/ised.html)
+---
+## Description
+I-SED is a human-in-the-loop interface for sound event annotation that helps users search for sound events of interest within a lenghty recording quickly. How a user interects with the interface is following:
 
-You can simply watch the demo video to understand how the interface works: [YouTube video](https://youtu.be/Ss2eGSW4_4w)
+1. A user selects a sound event of interest in a long recording
+2. The interface returns a set of regions conaining sound events similar to the initial user selection.
+3. The user listens to each of them and label them (positve or negative). 
+4. Based on the label information, the interface suggests another set of regions in the recording.
+
+
+Screenshot:
+
+<img src="./ised_screenshot.png" width="700">
+
+---
+## Demo video: [YouTube video](https://youtu.be/Ss2eGSW4_4w)
+
+More details about the interaction can be found on the following project pages: [https://www.bongjunkim.com/pages/projects/ised.html](https://www.bongjunkim.com/pages/projects/ised.html)
 
 
 
+---
+## Citation
+When used in academic works, please cite the following paper:
+>Bongjun Kim and Bryan Pardo, “A Human-in-the-loop System for Sound Event Detection and Annotation,” ACM Transaction on Interactive Intelligent System (TiiS), Vol. 8, Issue 2, Article 13, July 2018.
+
+
+## To run the app
+
+
+```shell
+python run.py
+```
