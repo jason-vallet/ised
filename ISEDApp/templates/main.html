@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src=" https://unpkg.com/wavesurfer.js@6.2.0/dist/wavesurfer.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js@6.2.0/dist/plugin/wavesurfer.timeline.min.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js@6.2.0/dist/plugin/wavesurfer.regions.min.js"></script>
+    <!-- <script src="http://127.0.0.1:5000/static/js/lib/wavesurfer.js"></script> -->
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+    <script src="/static/js/lib/jquery-3.6.0.js"></script>
+    <script src="/static/js/lib/json_to_csv.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript" src="/static/js/ised_main.js"></script>
+    <script type="text/javascript" src="/static/js/initQuery_modal.js"></script>
+    <link rel="stylesheet"  type="text/css" href="/static/css/styles.css">
+
+
+</head>
+<body>
+    <div class="container-fluid" style="padding-top:20px">
+        <!--     <div class="starter-template"> -->
+        <h3><b>I-SED: an Interactive Sound Event Detector (Demo)</b></h3>
+    
+        <div class="alert alert-success" role="alert" id="Instructions">
+            <b>Click "Load Audio" to load an example audio for demo: </b>
+               <button id="preloadedAudio" class="btn btn-success" onclick="loadPreset()" title="Load audio"><b>Load Audio</b></button>
+        </div>
+        
+        <!-- contorl buttons -->
+        <div class = "form-inline">
+            <div class="btn-group" disabled="true">
+                <button id="browseButton" class="btn btn-primary btn-file" title="Open audio file">
+                    <i class="bi-folder2-open" style = "font-size: 1.3rem; "></i>
+                    <input id="audio_file" type="file" accept="audio/*">
+                </button>
+            </div>
+            
+            <div class="form-group"  style="padding-left:15px">
+                <div class="btn-group" >
+                  <button id="playButton" class="btn btn-success" title="Play" data-action="play" onclick="playAudio(-1)" disabled="true">
+                    <i class="bi-caret-right-fill" style = "font-size: 1.3rem"></i>
+                  </button>
+                  <button id="stopButton" class="btn btn-warning" title="Stop" onclick="stopPlaying()" disabled="true">
+                    <i class="bi-stop-fill" style = "font-size: 1.3rem"></i>
+                  </button>
+                  <button id="backwardButton" class="btn btn-primary" title="To the previous region" onclick="backward()" disabled="true">
+                    <i class="bi-chevron-left" style = "font-size: 1.3rem"></i>
+                  </button>
+                  <button id="forwardButton" class="btn btn-primary" title="To the next region"  onclick="forward()" disabled="true">
+                    <i class="bi-chevron-right" style = "font-size: 1.3rem"></i>
+                  </button>
+                  <button id="toEndButton" class="btn btn-primary" title="To the begining" onclick="toTheStart()" disabled="true">
+                    <i class="bi-chevron-bar-left" style = "font-size: 1.3rem"></i>
+                    
+                  </button>
+                  <button id="toBeginButton" class="btn btn-primary" title="To the end" onclick="toTheEnd()" disabled="true">
+                    <i class="bi-chevron-bar-right" style = "font-size: 1.3rem"></i>
+                  </button>
+                </div>
+            </div>
+
+            <div class="btn-group" style="padding-left: 15px; opacity: 0">
+                <button id="pencilButton" class="btn btn-default" title="Enabling to label by mouse dragging" onclick="pencilMode()" disabled="true">
+                  <!-- <span class="glyphicon glyphicon-tint" style = "padding:.15em .1em;"></span> -->
+                </button>
+            </div>
+
+            <div class="form-group" style="opacity: 0">
+                <!-- <label for="currentLabel" style="padding-left:15px"><span class="glyphicon glyphicon-pencil" style = "padding:.15em .1em"></span></label> -->
+                <select class="form-control" id="currentLabel" name="currentLabel"  style="background: rgba(0, 0, 255, 0.5); color:#FFFFFF; opacity:0.5" disabled="true" onChange="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor" title="When pencil on, select one label">
+                 <!--  <option disabled selected> --select--</option> -->
+                  <option value="positive" style="background-color: rgba(0, 0, 255, 0.5)">Positive</option>
+                  <option value="negative" style="background-color:rgba(255, 0, 0, 0.5)">Negative</option>
+                  <!-- <option value="unknown">Unknown</option> -->
+                </select>
+            </div>
+
+            <div class="form-group" style="padding-left:50px">
+                <button id="queryByExampleButton" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#queryModal" title="Help to find initial query" disabled="true">
+                <b>Query-by-Example</b>
+                </button>
+            </div>
+
+            <div class="form-group" style="padding-left:5px">
+                <button id="startoverButton" class="btn btn-danger disabled" disabled="true" onclick="clearAllClick()" title="Erase all labels and regions" disabled="true"><span class="glyphicon glyphicon-warning-sign" style = "padding:.15em .1em"></span> <b>Clear All</b>
+                </button>
+            </div>
+        </div>
+
+            <!-- Modal for query-by-example -->
+        <div id="queryModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+  
+            <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Give me an example audio of what you are searching for</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p><b>1. Click "Load a target example" to load an example of target sound (speech)
+                        <br> 2. You can listen to the audio by clicking on the play button
+                        <br>3. Select a region containing the target sound (speech) by draging mouse over the waveform
+                        <br>4. make sure the region is highlighted with a blue colored box and click "Search!"
+                        <!-- <br><br>NOTE: Intead of loading the example, you can upload your audio file, but we recommend to try our example for the demo -->
+                        </b>
+                        </p>
+                        <button id="preloadInitQuery" class="btn btn-primary" onclick="loadPreset_initTarget()" title="Load a target example (speech)"><b>Load a target example (speech)</b></button>
+                        <div id="instruction_modal"></div>
+                        <br>
+                        <br>
+        
+                        <div class = "form-inline">
+                                
+                        <!--   <button id="browseButton_modal" class="btn btn-primary btn-file" title="Open audio file">
+                                <span class="glyphicon glyphicon-folder-open" style = "padding:.15em .1em"></span>
+                                <input id="audio_file_modal" type="file" accept="audio/*">
+                                </button> -->
+                                
+                            <div class="form-group"  style="padding-left:15px">
+                                <div class="btn-group">
+                                    <button id="playButton_modal" class="btn btn-success" title="Play" data-action="play" onclick="playAudio_modal()">
+                                        <i class="bi-caret-right-fill" style = "font-size: 1.3rem"></i>
+                                    </button>
+                                    <button id="stopButton_modal" class="btn btn-warning" title="Stop" onclick="stopPlaying_modal()">
+                                        <i class="bi-stop-fill" style = "font-size: 1.3rem"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <br>
+        
+        
+                        <div style="background-color:#F0F0F0 ; border-radius:2px; border: 1px solid #303030">
+                            <div id="waveform_modal" style="width: 100%">
+                                <div class="progress progress-striped active" id="progress-bar" style="display: none;">
+                                    <div class="progress-bar progress-bar-info" style="width: 100%;"></div>
+                                </div>
+                            </div>
+                            <div id = "wave-timeline_modal"> </div>
+                        </div>
+    
+                        <br>
+    
+                        <div class="form-group" style="padding-left:10px">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="findInitQuery()"> <b>Search!</b></button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div> 
+                <!-- Modal body ends -->
+                </div>
+            </div>
+        </div>
+      <!-- Query-by-example modal ends -->
+
+
+
+        <!-- The end of control buttons -->
+
+        <div id="demo">
+            <b><i>Navigation Map</i></b>      
+            <div style="background-color:#F0F0F0 ; border-radius:2px; border: 1px solid #303030">
+                <div id="waveform2" style="width: 100%">
+                    <div class="progress progress-striped active" id="progress-bar" style="display: none;">
+                        <div class="progress-bar progress-bar-info" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div id = "wave-timeline2"> </div>
+            </div>
+            <br>
+            <b><i>Annotation Track</i></b>
+            <div style="background-color:#F0F0F0 ; border-radius:2px; border: 1px solid #303030;">
+                <div id="waveform" style="width: 100%; cursor: text">
+                    <div class="progress progress-striped active" id="progress-bar" style="display: none;">
+                        <div class="progress-bar progress-bar-info" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div id = "wave-timeline"> </div>
+            </div>
+
+            <div style="background-color:#F0F0F0 ; border-radius:2px; border: 1px solid #303030">
+                <form class="form-inline" id="selectedRegionForm" role="form" name="edit" style="opacity: 0; transition: opacity 300ms linear; margin: 0px 0px 0px 0px; padding-left:10px">
+                    <div class="form-group">
+                        <label for="start" style="padding-left:1px;"><i>Selected Region Info:   </i> </label>
+                        <label for="start" style="padding-left:5px">Start(s): </label>
+                        <input class="form-control" id="start" name="start" size = 3 height="20" onClick="inputClick()" onblur="exitInput()"/>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="end" style="padding-left:15px">End(s):</label>
+                        <input class="form-control" id="end" name="end" size = 3 onClick="inputClick()" onblur="exitInput()"/>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="selectedRegion_label" style="padding-left:15px">Label:</label>
+                        <label for="selectedRegion_value" id = "selectedRegion_value" style="padding-left:5px">- </label>
+                        <!--             <select class="form-control" id="inst" name="inst">
+                          <option value="default" selected disabled>Choose one</option>
+                          <option value="positive">Positive</option>
+                          <option value="negative">Negative</option>
+                        </select> -->
+                    </div>
+                </form>
+            </div>
+            
+            <br>
+
+            <div class="form-group" id="initSubmitDiv" style="padding-left:0px; opacity: 1">
+                <!-- <div class="form-group" id="initSubmitDiv" style="padding-left:0px; opacity: 1; position: absolute; z-index:2"> -->
+                <button id = "initSubmitButton" class="btn btn-primary" disabled="true" onclick="clickSubmit()" style="height:100px;opacity: 0; transition: opacity 300ms linear"><b><font size="4">Find Similar Regions</font></b>
+                </button>
+            </div>
+
+            <div id="regionSelectionDiv" style="opacity: 0;">
+                <b><i>Listen and Label These</i><b>
+                <div style="background-color:#F0F0F0 ; border-radius:2px; border: 1px solid #303030">
+                    <form class="form-inline" id="regionSelection" role="form" style="opacity: 0; transition: opacity 300ms linear; margin: 5px 0px 5px 0px; padding-left:10px">
+                        <div class="form-group">
+                            <select class="form-control" style="width:250px" id="neighborsSelect" name="filter" size="6" onclick="playSuggestedRegions()">
+                                <option selected disabled><b>Click and label regions below</b></option>
+                            </select>
+                        </div>
+        
+                        <div class="form-group" style="padding-left:10px">
+                            <button type="button" id="yesButton" class="btn btn-primary btn-block" onclick="labelingPos()" style="opacity: 1; transition: opacity 300ms linear"><b>Positive</b></button>
+                             <!-- <button type="button" id="adjustButton" class="btn btn-warning btn-block" onclick="adjustBoundary()" style="opacity: 1; transition: opacity 300ms linear;"><b>partially Positive</b></button> -->
+                            <br>
+                            <br>
+                            <button type="button" id="noButton" class="btn btn-danger btn-block" onclick="labelingNeg()" style="opacity: 1; transition: opacity 300ms linear"><b>Negative</b></button>
+                        </div>
+        
+                        <div class="form-group" style="padding-left:15px;padding-right:30px">
+                            <button type="button" id = "submitButton" class="btn btn-warning" disabled="true" onclick="clickSubmit()" style="height: 74px"><b>Find Similar Regions</b>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <br><br>
+            
+            <div id="labeledRegionDiv" style="opacity: 0;">
+                <b><i>Already Labeled </i><b>
+                <div style="background-color:#F0F0F0 ; border-radius:2px; border: 1px solid #303030">
+                    <form class="form-inline" id="labeledRegions" role="form" style="opacity: 0; transition: opacity 300ms linear; margin: 5px 0px 5px 0px; padding-left:10px">
+                        <div class="form-group">
+                            <select class="form-control" style="width:250px" id="labeledList" name="filter" size="6" onclick="playLabeledRegions()" >
+                                <!--  <option disabled selected> --select--</option> -->
+                                <option selected disabled><b>User labeled regions</b></option>
+                            </select>
+                        </div>
+          
+                        <div class="form-group">
+                            <label for="start" style="padding-left:1px;"><i>Label:</i> </label>
+                            <input class="form-control" id="labelName" size = 7 height="20" onClick="inputClick()" onblur="exitInput()" value="positive"/>
+                        </div>
+          
+                        <div class="form-group" style="padding-left:15px">
+                            <button type="button" id = "export" class="btn btn-primary" onclick="downloadCSV()" style="height: 74px"><b>Export Results (CSV) </b>
+                            </button>
+                        </div>
+          
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="About">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                <p>
+                <b>I-SED: Interactive Sound Event Detector</b><br>
+                - Project page: <a href="https://www.bongjunkim.com/pages/projects/ised.html" target="_blank">
+                [click] </a><br>
+                - Developed by <a href="https://www.bongjunkim.com/" target="_blank">Bongjun Kim</a> 
+                </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer" style="text-align: center">
+            &#169; 2018 <a href="https://www.bongjunkim.com/" target="_blank">Bongjun Kim</a> <br><br>
+
+    </div>
+
+   
+</body>
+</html>
