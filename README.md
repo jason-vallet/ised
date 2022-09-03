@@ -31,6 +31,7 @@ When used in academic works, please cite the following paper:
 
 ## To run the app
 
+Run the following command to start the Flask server. Then visit `http://127.0.0.1:5000` (or the address printed on your terminal) in your browser. 
 
 ```shell
 python run.py
