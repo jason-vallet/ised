@@ -2,6 +2,8 @@
 
 *NOTE: I-SED was developed in 2017 as a proof-of-concept for a user study of a research paper and built with very shallow knowledge of web-development. Therefore, it is not ready for other purposes and the code is very disorganized. However, you can still run the app (tested in 2022) and test the main concept of the interactive sound event annotation. I believe some components of this app would be quite useful to people who want to build a sound event annotator.*
 
+*I-SED is built with Python Flask and javascript ([wavesurfer.js](https://wavesurfer-js.org/))*
+
 ---
 ## Description
 I-SED is a human-in-the-loop interface for sound event annotation that helps users search for sound events of interest within a lenghty recording quickly. How a user interects with the interface is following:
