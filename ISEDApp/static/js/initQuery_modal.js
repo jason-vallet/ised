@@ -99,7 +99,7 @@ function findInitQuery(){
     document.getElementById("Instructions").className = "alert alert-danger";
     $('#initSubmitButton').remove();
     
-    tempRegion.update({data: {label: 'positive'}, color: instColors['positive']});
+    tempRegion.update({data: {label: 'positive'}, color: regionColors['positive']});
 
     regions = []
     for (var key in wavesurfer_modal.regions.list){
@@ -187,16 +187,16 @@ function findInitQuery(){
                     $('#confidence').val(confidence['confidence'])
                 });
 
-            if (iteration>=1){
-                $.get('/updateGraph',
-                function (data, textStatus, jqXHR){
-            //    //console.log('updateGraph')
-                serverData_graph = JSON.parse(data);
-                updateGraph();
+            // if (iteration>=1){
+            //     $.get('/updateGraph',
+            //     function (data, textStatus, jqXHR){
+            // //    //console.log('updateGraph')
+            //     serverData_graph = JSON.parse(data);
+            //     updateGraph();
 
-                });
+            //     });
 
-            }
-            iteration +=1;            
+            // }
+            // iteration +=1;            
         })
 }

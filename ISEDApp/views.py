@@ -144,7 +144,7 @@ def submit_corrections_initQuery():
 
 
 
-		returnedRegions, confidence = search_regions(audio, init_region, overallFeatures, numOfNeighbors, seg_win_sec, seg_hop_sec, isInitQuery=True)
+		returnedRegions, confidence = search_regions(audio, init_region, overallFeatures, numOfNeighbors, seg_win_sec, seg_hop_sec, is_init_query=True)
 
 		response = make_response(json.dumps(returnedRegions))
 
