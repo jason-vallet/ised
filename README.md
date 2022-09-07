@@ -1,6 +1,6 @@
 # I-SED: Interactive Sound Event Detector
 
-*NOTE: I-SED was developed in 2017 as a proof-of-concept for a user study of a research paper and built with very shallow knowledge of web-development. There has been no major update since then. Therefore, it is not ready for other purposes and the code is very disorganized. However, you can still run the app (fixed and tested in 2022) and try the demo interface on your local machine. I believe some components of this app would be quite useful to people who want to build a sound event annotator.*
+*NOTE: I-SED was developed in 2017 as a proof-of-concept for a user study of a research paper and built with very shallow knowledge of web-development. There has been no major update since then. Therefore, it is not ready for other purposes and the code is very disorganized. However, you can still run the app (fixed and tested in 2022) and try the demo interface **with your own audio file on your local machine**. I believe some components of this app would be quite useful to people who want to build a sound event annotator.*
 
 *I-SED is built with Python Flask and javascript ([wavesurfer.js](https://wavesurfer-js.org/))*
 
