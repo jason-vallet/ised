@@ -158,7 +158,7 @@ def run():
 	#querystring = request.args
 	filePath = os.path.join(UPLOAD_FOLDER, request.args.get('name'))
 
-
+	"""
 	fileChars = list(filePath)
 	filePath = ""
 
@@ -169,6 +169,7 @@ def run():
 			filePath += ""
 		else:
 			filePath += fileChars[i]
+	"""
 	
 	app.config['CURRENT_AUDIO_PATH'] = filePath
 	
@@ -179,6 +180,7 @@ def run_modal():
 
 	filePath = os.path.join(UPLOAD_FOLDER, request.args.get('name'))
 
+	"""
 	fileChars = list(filePath)
 	filePath = ""
 
@@ -189,6 +191,7 @@ def run_modal():
 			filePath += ""
 		else:
 			filePath += fileChars[i]
+	"""
 	
 	print('filePath', filePath)
 	app.config['CURRENT_AUDIO_PATH_MODAL'] = filePath
